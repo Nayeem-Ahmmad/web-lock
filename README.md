@@ -1,7 +1,7 @@
 # Web Lock
 
-**Ask for a password every time you open a new tab in Chrome.**
-**Chrome-এ নতুন ট্যাব খুললেই পাসওয়ার্ড চাইবে।**
+**Ask for a password in Chrome: on every new tab, and (optionally) before any new page loads.**
+**Chrome-এ নতুন ট্যাবে এবং (ঐচ্ছিকভাবে) যেকোনো নতুন পেজ খোলার আগে পাসওয়ার্ড চাইবে।**
 
 [English](#english) | [বাংলা](#বাংলা)
 
@@ -9,38 +9,47 @@
 
 ## English
 
-### What it does
-- Shows a password screen whenever you open a **new tab** (Ctrl+T) in a normal Chrome window.
-- You create your own password on first run. A **recovery key** is given so you can reset a forgotten password.
-- Wrong passwords are slowed down: 5 failures trigger a temporary lock that grows longer.
-- Settings: ask every time or once per N minutes, and choose the page that opens after unlocking (Google, Bing, DuckDuckGo or your own URL).
-- 100% offline: **no data is collected or sent anywhere.** The only permission requested is `storage`. Only salted PBKDF2-SHA256 hashes are stored, on your own device.
+### Two lock modes
+| Mode | What it locks |
+|---|---|
+| **New tab only** (default) | Opening a new tab (Ctrl+T) |
+| **Browser Lock** (version 2) | New tab **plus** typed addresses, bookmarks and clicked links while locked. Asks once, then stays unlocked until you are idle for N minutes. |
+
+Browser Lock needs one extra, **optional** Chrome permission (`webNavigation`, shown as "read your browsing history"). It is requested only when you switch Browser Lock on in Settings. Nothing is stored or sent anywhere.
+
+### Features
+- Create your own password on first run. A **recovery key** lets you reset a forgotten password.
+- Slows down guessing: 5 wrong attempts trigger a temporary lock that grows longer.
+- **Click the toolbar icon to lock now.**
+- Settings: lock mode, idle timeout, and the page that opens after unlocking (Google, Bing, DuckDuckGo or your own URL).
+- 100% offline. No data is collected or sent. Only salted PBKDF2-SHA256 hashes are stored on your device.
 
 ### What it does NOT do (please read)
-- It does **not** lock tabs that are already open (for example a Gmail tab you left open).
+- It does **not** hide or lock tabs that are **already open** (for example a Gmail tab you left open).
 - It does **not** work in **Incognito** windows.
-- It **cannot stop someone from removing** the extension from `chrome://extensions`.
+- It **cannot stop someone from removing** the extension.
+- In Browser Lock mode a page may flash for a moment before the lock screen appears.
 - It is a privacy tool against casual snooping, not a replacement for locking your computer (Win + L).
 
 ### Install (free, Chrome / Chromium browsers)
-1. Go to the [**Releases**](../../releases) page and download `web-lock-v1.0.0.zip`.
+1. Go to the [**Releases**](../../releases) page and download `web-lock-v2.0.0.zip`.
 2. **Extract** it to a permanent folder, for example `Documents\WebLock`. Do not delete or move this folder afterwards.
 3. Open `chrome://extensions` in Chrome.
 4. Turn on **Developer mode** (top right).
-5. Click **Load unpacked** and select the extracted folder (the one that contains `manifest.json`).
+5. Click **Load unpacked** and select the extracted folder (the one containing `manifest.json`).
 6. A new tab opens: create your password and **save your recovery key**.
+7. (Optional) Open Settings and choose **Browser Lock**.
 
 Notes:
 - Chrome may show a "Developer mode extensions" warning at startup. This is normal for extensions installed this way.
 - If Chrome says *Manifest file is missing*, you selected the wrong folder. Select the folder that directly contains `manifest.json`.
-- Chrome does not auto-update extensions installed this way. To update, extract the new version **over the same folder**, then click the reload icon on the Web Lock card in `chrome://extensions`.
-- If you move the folder, the extension is treated as new and you will have to set up your password again.
+- Updating: extract the new version **over the same folder**, then click the reload icon on the Web Lock card in `chrome://extensions`. Your password and settings are kept as long as the folder stays in the same place.
+- If you move the folder, the extension is treated as new and you will have to set up again.
 
-### Forgot your password?
-Click **Forgot password?** on the lock screen and enter your recovery key. A new recovery key is issued after a reset. If you lost both, remove the extension and install it again (this erases its data).
-
-### Settings
-Click the Web Lock icon in the Chrome toolbar (or right-click the icon, then Options). The password is required to open settings.
+### Using it
+- **Lock now:** click the Web Lock icon in the toolbar.
+- **Settings:** right-click the icon and choose *Options*, or click *Settings* on the lock screen. The password is required.
+- **Forgot your password?** Click *Forgot password?* on the lock screen and enter your recovery key. A new recovery key is issued after a reset. If you lost both, remove the extension and install it again (this erases its data).
 
 ### Privacy and terms
 See [PRIVACY.md](PRIVACY.md) and [TERMS.md](TERMS.md).
@@ -52,38 +61,47 @@ See [PRIVACY.md](PRIVACY.md) and [TERMS.md](TERMS.md).
 
 ## বাংলা
 
-### এটা কী করে
-- Chrome-এর সাধারণ উইন্ডোতে **নতুন ট্যাব** (Ctrl+T) খুললেই পাসওয়ার্ড চাইবে।
-- প্রথমবার চালালে তুমি নিজের পাসওয়ার্ড বানাবে। পাসওয়ার্ড ভুলে গেলে রিসেটের জন্য একটা **Recovery Key** দেওয়া হয়।
-- ভুল পাসওয়ার্ড দিলে গতি কমানো হয়: ৫ বার ভুলে সাময়িক লক হয়, এবং সময় ক্রমে বাড়ে।
-- Settings-এ ঠিক করা যায় প্রতিবার চাইবে নাকি N মিনিটে একবার, আর আনলকের পর কোন পেজ খুলবে (Google, Bing, DuckDuckGo বা নিজের URL)।
-- পুরোটা অফলাইনে চলে: **কোনো ডেটা সংগ্রহ বা কোথাও পাঠানো হয় না।** শুধু `storage` অনুমতি লাগে। তোমার নিজের ডিভাইসে কেবল salt সহ PBKDF2-SHA256 hash রাখা হয়।
+### দুটো লক মোড
+| মোড | কী লক করে |
+|---|---|
+| **New tab only** (ডিফল্ট) | নতুন ট্যাব খোলা (Ctrl+T) |
+| **Browser Lock** (ভার্সন ২) | নতুন ট্যাব **এবং** লক অবস্থায় অ্যাড্রেস বারে লেখা ঠিকানা, বুকমার্ক ও লিংক। একবার পাসওয়ার্ড দিলে N মিনিট নিষ্ক্রিয় না থাকা পর্যন্ত আনলক থাকে। |
+
+Browser Lock-এর জন্য একটা বাড়তি **ঐচ্ছিক** Chrome অনুমতি লাগে (`webNavigation`, Chrome এটাকে "browsing history পড়া" হিসেবে দেখায়)। Settings-এ Browser Lock চালু করলেই শুধু এটা চাওয়া হয়। কোনো ঠিকানা সংরক্ষণ বা কোথাও পাঠানো হয় না।
+
+### সুবিধা
+- প্রথমবার নিজের পাসওয়ার্ড বানাবে। ভুলে গেলে **Recovery Key** দিয়ে রিসেট করা যায়।
+- ভুল পাসওয়ার্ডে গতি কমে: ৫ বার ভুলে সাময়িক লক, সময় ক্রমে বাড়ে।
+- **টুলবারে আইকনে চাপলে সঙ্গে সঙ্গে লক হয় (Lock now)।**
+- Settings-এ লক মোড, নিষ্ক্রিয়তার সময়, আর আনলকের পর কোন পেজ খুলবে (Google, Bing, DuckDuckGo বা নিজের URL) ঠিক করা যায়।
+- পুরোটা অফলাইনে চলে। কোনো ডেটা সংগ্রহ বা পাঠানো হয় না। শুধু salt সহ PBKDF2-SHA256 hash তোমার ডিভাইসে থাকে।
 
 ### যা করে **না** (অবশ্যই পড়ো)
-- আগে থেকে **খোলা ট্যাব** (যেমন খুলে রাখা Gmail) লক করে না।
+- **আগে থেকে খোলা ট্যাব** (যেমন খুলে রাখা Gmail) লুকায় না বা লক করে না।
 - **Incognito** উইন্ডোতে কাজ করে না।
-- কেউ `chrome://extensions` থেকে extension **মুছে ফেললে আটকাতে পারে না**।
+- কেউ extension **মুছে ফেললে আটকাতে পারে না**।
+- Browser Lock মোডে লক স্ক্রিন আসার আগে পেজ এক মুহূর্তের জন্য ঝলক দিতে পারে।
 - এটা সাধারণ কৌতূহল ঠেকানোর টুল, কম্পিউটার লক করার (Win + L) বিকল্প নয়।
 
 ### ইনস্টল (ফ্রি, Chrome / Chromium ব্রাউজার)
-1. [**Releases**](../../releases) পেজ থেকে `web-lock-v1.0.0.zip` ডাউনলোড করো।
+1. [**Releases**](../../releases) পেজ থেকে `web-lock-v2.0.0.zip` ডাউনলোড করো।
 2. একটা **স্থায়ী ফোল্ডারে Extract** করো, যেমন `Documents\WebLock`। পরে এই ফোল্ডার মুছবে না বা সরাবে না।
 3. Chrome-এ `chrome://extensions` খোলো।
 4. ডান উপরে **Developer mode** চালু করো।
 5. **Load unpacked** চাপো এবং Extract করা ফোল্ডারটা (যার ভেতরে সরাসরি `manifest.json` আছে) বেছে নাও।
 6. নতুন ট্যাব খুলবে: পাসওয়ার্ড সেট করো এবং **Recovery Key সংরক্ষণ** করো।
+7. (ঐচ্ছিক) Settings খুলে **Browser Lock** বেছে নাও।
 
 জেনে রাখো:
 - Chrome চালুর সময় "Developer mode extensions" সতর্কবার্তা আসতে পারে। এভাবে ইনস্টল করা extension-এ এটা স্বাভাবিক।
 - *Manifest file is missing* দেখালে ভুল ফোল্ডার বেছেছ। যে ফোল্ডারে সরাসরি `manifest.json` আছে সেটা বেছে নাও।
-- এভাবে ইনস্টল করলে Chrome নিজে থেকে আপডেট করে না। আপডেট করতে নতুন ভার্সন **একই ফোল্ডারে** Extract করে `chrome://extensions`-এ Web Lock কার্ডের রিলোড (↻) চাপো।
-- ফোল্ডারের জায়গা বদলালে extension নতুন হিসেবে ধরা হবে এবং পাসওয়ার্ড আবার সেট করতে হবে।
+- আপডেট: নতুন ভার্সন **একই ফোল্ডারে** Extract করে `chrome://extensions`-এ Web Lock কার্ডের রিলোড (↻) চাপো। ফোল্ডারের জায়গা না বদলালে পাসওয়ার্ড ও settings থেকে যায়।
+- ফোল্ডারের জায়গা বদলালে extension নতুন ধরা হবে এবং আবার সেটআপ করতে হবে।
 
-### পাসওয়ার্ড ভুলে গেলে
-লক স্ক্রিনে **Forgot password?** চেপে Recovery Key দাও। রিসেটের পর নতুন Recovery Key দেওয়া হবে। দুটোই হারালে extension মুছে আবার ইনস্টল করতে হবে (এতে এর সব ডেটা মুছে যায়)।
-
-### Settings
-Chrome-এর উপরের টুলবারে Web Lock আইকনে চাপো (বা আইকনে রাইট-ক্লিক করে Options)। Settings খুলতে পাসওয়ার্ড লাগবে।
+### ব্যবহার
+- **এখনই লক:** টুলবারে Web Lock আইকনে চাপো।
+- **Settings:** আইকনে রাইট-ক্লিক করে *Options* বেছে নাও, বা লক স্ক্রিনে *Settings* চাপো। পাসওয়ার্ড লাগবে।
+- **পাসওয়ার্ড ভুলে গেলে:** লক স্ক্রিনে *Forgot password?* চেপে Recovery Key দাও। রিসেটের পর নতুন Recovery Key দেওয়া হবে। দুটোই হারালে extension মুছে আবার ইনস্টল করতে হবে (এতে সব ডেটা মুছে যায়)।
 
 ### গোপনীয়তা ও শর্ত
 [PRIVACY.md](PRIVACY.md) ও [TERMS.md](TERMS.md) দেখো।

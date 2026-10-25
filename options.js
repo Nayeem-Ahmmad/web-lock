@@ -67,11 +67,28 @@ $("form-gate").addEventListener("submit", async (e) => {
 });
 
 // ---------- settings ----------
+const MODE_HINTS = {
+  newtab: "Asks for the password when you open a new tab.",
+  browser: "Also asks when you type an address, use a bookmark or click a link while locked. " +
+    "Chrome will ask your permission to \"read your browsing history\" (webNavigation). " +
+    "Web Lock does not store or send any address."
+};
+
+function syncMode() {
+  const mode = $("set-mode").value;
+  $("mode-hint").textContent = MODE_HINTS[mode];
+  $("opt-every").disabled = mode === "browser";
+  if (mode === "browser" && $("set-timeout").value === "0") $("set-timeout").value = "5";
+}
+$("set-mode").addEventListener("change", syncMode);
+
 function loadSettings() {
+  $("set-mode").value = cfg.lockMode === "browser" ? "browser" : "newtab";
   $("set-timeout").value = String(cfg.timeoutMin || 0);
   $("set-landing").value = cfg.landing || "google";
   $("set-custom").value = cfg.customLanding || "";
   $("set-custom").hidden = $("set-landing").value !== "custom";
+  syncMode();
 }
 
 $("set-landing").addEventListener("change", () => {
@@ -79,12 +96,29 @@ $("set-landing").addEventListener("change", () => {
 });
 
 $("btn-save-settings").addEventListener("click", async () => {
+  let mode = $("set-mode").value;
+  if (mode === "browser") {
+    // Must be called straight from the click (user gesture).
+    let granted = false;
+    try {
+      granted = await chrome.permissions.request({ permissions: ["webNavigation"] });
+    } catch (e) { granted = false; }
+    if (!granted) {
+      $("set-mode").value = "newtab";
+      syncMode();
+      return say("msg-settings", "Browser Lock needs the permission, which was not granted. Mode stays 'New tab only'.", "error");
+    }
+  } else {
+    try { await chrome.permissions.remove({ permissions: ["webNavigation"] }); } catch (e) { /* ignore */ }
+  }
   const landing = $("set-landing").value;
   const custom = $("set-custom").value.trim();
   if (landing === "custom" && !WL.validateCustomUrl(custom)) {
     return say("msg-settings", "Enter a valid address starting with https:// or http://", "error");
   }
+  cfg.lockMode = mode;
   cfg.timeoutMin = parseInt($("set-timeout").value, 10) || 0;
+  if (mode === "browser" && cfg.timeoutMin < 1) cfg.timeoutMin = 5;
   cfg.landing = landing;
   cfg.customLanding = landing === "custom" ? custom : "";
   await WL.saveConfig(cfg);

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Web Lock",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Protect your browser by requiring a password every time a new tab is opened.",
   "minimum_chrome_version": "102",
   "icons": {
@@ -17,14 +17,20 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "Web Lock settings",
+    "default_title": "Web Lock: click to lock now",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
-  "permissions": ["storage"]
+  "permissions": [
+    "storage"
+  ],
+  "optional_permissions": [
+    "webNavigation"
+  ]
 }

@@ -38,16 +38,23 @@
       <p class="sub">Changes apply to new tabs opened after saving.</p>
 
       <h2>Behavior</h2>
+      <label for="set-mode">Lock mode</label>
+      <select id="set-mode">
+        <option value="newtab">New tab only</option>
+        <option value="browser">Browser Lock (also typed addresses, bookmarks, links)</option>
+      </select>
+      <div class="hint" id="mode-hint"></div>
+
       <label for="set-timeout">Ask for the password</label>
       <select id="set-timeout">
-        <option value="0">Every time a new tab opens</option>
+        <option value="0" id="opt-every">Every time a new tab opens</option>
         <option value="1">Once per 1 minute</option>
         <option value="5">Once per 5 minutes</option>
         <option value="15">Once per 15 minutes</option>
         <option value="30">Once per 30 minutes</option>
         <option value="60">Once per 1 hour</option>
       </select>
-      <div class="hint">"Once per N minutes" means that after unlocking, new tabs open without a password for N minutes. It always resets when the browser is closed.</div>
+      <div class="hint">"Once per N minutes" is an idle timeout: while you keep browsing it stays unlocked, and it locks again after N minutes without opening a new page. It always resets when the browser is closed.</div>
 
       <label for="set-landing">After unlocking, open</label>
       <select id="set-landing">
@@ -86,7 +93,7 @@
 
       <div class="note">
         Web Lock stores only salted hashes of your password and recovery key, on this device. Nothing is sent anywhere.
-        Web Lock locks <strong>new tabs</strong> in normal windows. It does not lock tabs that are already open, Incognito windows, or protect against someone who removes the extension. Lock your computer (Win + L) when you leave your desk.
+        Web Lock never locks tabs that are already open, does not work in Incognito windows, and cannot stop someone from removing the extension. Click the toolbar icon to lock now, and lock your computer (Win + L) when you leave your desk.
       </div>
     </section>
 

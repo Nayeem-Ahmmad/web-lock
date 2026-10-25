@@ -129,7 +129,8 @@ export async function createInitialConfig(password, recoveryKey) {
   const cfg = {
     version: 1,
     ...creds,
-    timeoutMin: 0, // 0 = ask every time
+    timeoutMin: 0, // 0 = ask every time (new-tab mode only)
+    lockMode: "newtab", // "newtab" | "browser"
     landing: "google",
     customLanding: ""
   };
@@ -221,6 +222,38 @@ export async function isUnlocked() {
 
 export async function clearUnlock() {
   await chrome.storage.session.remove(SESSION_KEY);
+}
+
+// In "browser" mode, "ask every time" makes no sense (every click would ask),
+// so a minimum idle timeout is applied (default 5 minutes).
+export function effectiveTimeout(cfg) {
+  const t = Number(cfg && cfg.timeoutMin) || 0;
+  if (cfg && cfg.lockMode === "browser") return t >= 1 ? t : 5;
+  return t;
+}
+
+// Sliding idle timeout: while the user is active and unlocked, push the
+// expiry forward again.
+export async function touchUnlock(cfg) {
+  if (await isUnlocked()) await markUnlocked(effectiveTimeout(cfg));
+}
+
+// ---------- which addresses the Browser Lock guards ----------
+const SKIP_INTERNAL_HOSTS = ["newtab", "new-tab-page", "new-tab-page-third-party"];
+
+export function shouldGuardUrl(url) {
+  let u;
+  try {
+    u = new URL(url);
+  } catch (e) {
+    return false;
+  }
+  const p = u.protocol;
+  if (p === "http:" || p === "https:" || p === "ftp:" || p === "file:") return true;
+  if (p === "chrome:" || p === "brave:" || p === "edge:") {
+    return !SKIP_INTERNAL_HOSTS.includes(u.hostname);
+  }
+  return false; // chrome-extension:, about:, data:, blob:, javascript: ...
 }
 
 // ---------- landing page ----------

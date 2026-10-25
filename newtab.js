@@ -6,6 +6,10 @@ const views = ["setup", "key", "lock", "forgot"];
 
 let cfg = null;
 let countdownTimer = null;
+
+// Browser Lock sends us here as newtab.html?next=<address the user wanted>
+const nextParam = new URLSearchParams(location.search).get("next");
+const safeNext = nextParam && WL.shouldGuardUrl(nextParam) ? nextParam : null;
 let afterKey = null; // what to do when the user presses "Finish" on the key screen
 
 function show(name) {
@@ -21,8 +25,9 @@ function say(id, text, kind) {
   el.className = "msg" + (kind ? " " + kind : "");
 }
 
-function goLanding() {
-  location.replace(WL.resolveLandingUrl(cfg));
+function proceed() {
+  // Go where the user was heading (Browser Lock), else the configured page.
+  location.replace(safeNext || WL.resolveLandingUrl(cfg));
 }
 
 // ---------- show/hide password buttons ----------
@@ -90,8 +95,8 @@ $("form-setup").addEventListener("submit", async (e) => {
   // Nothing is saved until the user confirms they stored the recovery key.
   showKeyScreen(key, async () => {
     cfg = await WL.createInitialConfig(pw, key);
-    await WL.markUnlocked(cfg.timeoutMin);
-    goLanding();
+    await WL.markUnlocked(WL.effectiveTimeout(cfg));
+    proceed();
   });
 });
 
@@ -124,8 +129,8 @@ $("form-lock").addEventListener("submit", async (e) => {
   $("btn-unlock").disabled = true;
   const res = await WL.verifyPassword(cfg, pw);
   if (res.ok) {
-    await WL.markUnlocked(cfg.timeoutMin);
-    return goLanding();
+    await WL.markUnlocked(WL.effectiveTimeout(cfg));
+    return proceed();
   }
   $("lock-pw").value = "";
   if (res.lockedMs > 0) return startCountdown(res.lockedMs);
@@ -136,6 +141,7 @@ $("form-lock").addEventListener("submit", async (e) => {
 });
 
 $("link-forgot").addEventListener("click", () => show("forgot"));
+$("link-settings").addEventListener("click", () => chrome.runtime.openOptionsPage());
 $("link-back").addEventListener("click", () => show("lock"));
 
 // ---------- forgot / reset ----------
@@ -165,8 +171,8 @@ $("form-forgot").addEventListener("submit", async (e) => {
   await WL.setNewPassword(cfg, pw);
   await WL.setNewRecoveryKey(cfg, newKey);
   showKeyScreen(newKey, async () => {
-    await WL.markUnlocked(cfg.timeoutMin);
-    goLanding();
+    await WL.markUnlocked(WL.effectiveTimeout(cfg));
+    proceed();
   });
 });
 
@@ -174,8 +180,17 @@ $("form-forgot").addEventListener("submit", async (e) => {
 (async function init() {
   cfg = await WL.getConfig();
   if (!cfg) return show("setup");
-  if (await WL.isUnlocked()) return goLanding();
+  if (await WL.isUnlocked()) {
+    await WL.touchUnlock(cfg);
+    return proceed();
+  }
 
+  if (safeNext) {
+    try {
+      const host = new URL(safeNext).hostname || safeNext;
+      $("lock-sub").textContent = `Enter your password to continue to ${host}.`;
+    } catch (e) { /* keep default text */ }
+  }
   const wait = await WL.lockRemainingMs();
   show("lock");
   if (wait > 0) startCountdown(wait);

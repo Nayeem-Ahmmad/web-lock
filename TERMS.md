@@ -1,14 +1,14 @@
 # Web Lock - Terms of Use
 
-_Last updated: 2026-10-25_
+_Last updated: 2026-10-25 (version 2.0.0)_
 
 By installing or using Web Lock you agree to the following.
 
-1. **Purpose.** Web Lock asks for a password when you open a new tab in a normal browser window. It is a convenience and privacy tool to deter casual snooping.
+1. **Purpose.** Web Lock asks for a password when you open a new tab and, if you enable "Browser Lock", before the browser loads a new page while locked. It is a convenience and privacy tool to deter casual snooping.
 
-2. **Not a security guarantee.** Web Lock is not a substitute for operating-system security. It does not protect tabs that are already open, Incognito windows, or other browsers/profiles, and it cannot prevent someone with access to your computer from disabling or removing the extension, or from using developer tools. Lock your computer when you leave it.
+2. **Not a security guarantee.** Web Lock is not a substitute for operating-system security. It does not hide or protect tabs that are already open, does not work in Incognito windows or other browsers/profiles, may briefly show a page before redirecting to the lock screen, and cannot prevent someone with access to your computer from disabling or removing the extension, or from using developer tools. Lock your computer when you leave it.
 
-3. **Your password and recovery key.** Your password and recovery key are stored only as hashes on your device. The developer cannot see, recover, or reset them. If you lose both, the only way back is to remove and reinstall the extension, which erases its data.
+3. **Your password and recovery key.** They are stored only as hashes on your device. The developer cannot see, recover, or reset them. If you lose both, the only way back is to remove and reinstall the extension, which erases its data.
 
 4. **Your responsibility.** You are responsible for choosing a strong password, keeping your recovery key safe, and for using Web Lock in line with the rules of your workplace or school. Check with your IT department before installing extensions on managed computers.
 
