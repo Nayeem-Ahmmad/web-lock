@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Lock</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- SETUP: first run only -->
+    <section class="card" id="view-setup" hidden>
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#2563eb"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="16" y="28" width="32" height="24" rx="6" fill="#fff"/><circle cx="32" cy="38" r="3.5" fill="#2563eb"/><rect x="30.5" y="40" width="3" height="7" rx="1.5" fill="#2563eb"/></svg>
+      <h1>Welcome to Web Lock</h1>
+      <p class="sub">Create a password. It will be asked every time you open a new tab.</p>
+      <form id="form-setup" autocomplete="off">
+        <label for="setup-pw">New password</label>
+        <div class="field">
+          <input type="password" id="setup-pw" minlength="8" required>
+          <button type="button" class="toggle" data-target="setup-pw">Show</button>
+        </div>
+        <label for="setup-pw2">Confirm password</label>
+        <div class="field">
+          <input type="password" id="setup-pw2" minlength="8" required>
+          <button type="button" class="toggle" data-target="setup-pw2">Show</button>
+        </div>
+        <div class="hint">At least 8 characters.</div>
+        <button type="submit" class="primary">Continue</button>
+        <div class="msg" id="msg-setup" role="alert"></div>
+      </form>
+    </section>
+
+    <!-- RECOVERY KEY: shown after setup / after a reset -->
+    <section class="card wide" id="view-key" hidden>
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#2563eb"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="16" y="28" width="32" height="24" rx="6" fill="#fff"/><circle cx="32" cy="38" r="3.5" fill="#2563eb"/><rect x="30.5" y="40" width="3" height="7" rx="1.5" fill="#2563eb"/></svg>
+      <h1>Save your recovery key</h1>
+      <p class="sub">If you forget your password, this key is the only way to reset it. It is shown only once.</p>
+      <div class="key-box" id="key-value"></div>
+      <div class="row">
+        <button type="button" class="secondary" id="btn-copy">Copy</button>
+        <button type="button" class="secondary" id="btn-download">Download .txt</button>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="key-saved">
+        <span>I have saved my recovery key in a safe place.</span>
+      </label>
+      <button type="button" class="primary" id="btn-key-continue" disabled>Finish</button>
+      <div class="msg" id="msg-key" role="status"></div>
+    </section>
+
+    <!-- LOCK: every new tab -->
+    <section class="card" id="view-lock" hidden>
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#2563eb"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="16" y="28" width="32" height="24" rx="6" fill="#fff"/><circle cx="32" cy="38" r="3.5" fill="#2563eb"/><rect x="30.5" y="40" width="3" height="7" rx="1.5" fill="#2563eb"/></svg>
+      <h1>Web Lock</h1>
+      <p class="sub">Enter your password to continue.</p>
+      <form id="form-lock" autocomplete="off">
+        <div class="field">
+          <input type="password" id="lock-pw" placeholder="Password" required autofocus>
+          <button type="button" class="toggle" data-target="lock-pw">Show</button>
+        </div>
+        <button type="submit" class="primary" id="btn-unlock">Unlock</button>
+        <div class="msg" id="msg-lock" role="alert"></div>
+      </form>
+      <button type="button" class="link" id="link-forgot">Forgot password?</button>
+    </section>
+
+    <!-- FORGOT: reset using the recovery key -->
+    <section class="card" id="view-forgot" hidden>
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#2563eb"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="16" y="28" width="32" height="24" rx="6" fill="#fff"/><circle cx="32" cy="38" r="3.5" fill="#2563eb"/><rect x="30.5" y="40" width="3" height="7" rx="1.5" fill="#2563eb"/></svg>
+      <h1>Reset password</h1>
+      <p class="sub">Enter your recovery key and choose a new password.</p>
+      <form id="form-forgot" autocomplete="off">
+        <label for="forgot-key">Recovery key</label>
+        <input type="text" id="forgot-key" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required spellcheck="false">
+        <label for="forgot-pw">New password</label>
+        <div class="field">
+          <input type="password" id="forgot-pw" minlength="8" required>
+          <button type="button" class="toggle" data-target="forgot-pw">Show</button>
+        </div>
+        <label for="forgot-pw2">Confirm new password</label>
+        <div class="field">
+          <input type="password" id="forgot-pw2" minlength="8" required>
+          <button type="button" class="toggle" data-target="forgot-pw2">Show</button>
+        </div>
+        <button type="submit" class="primary" id="btn-reset">Reset password</button>
+        <div class="msg" id="msg-forgot" role="alert"></div>
+      </form>
+      <button type="button" class="link" id="link-back">Back</button>
+    </section>
+
+  </div>
+  <script type="module" src="newtab.js"></script>
+</body>
+</html>

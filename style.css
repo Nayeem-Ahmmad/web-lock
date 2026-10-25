@@ -1,0 +1,181 @@
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --danger: #dc2626;
+  --ok: #16a34a;
+  --shadow: 0 10px 40px rgba(15, 23, 42, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --card: #131c2e;
+    --text: #e8eefc;
+    --muted: #93a1bd;
+    --border: #243049;
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --danger: #f87171;
+    --ok: #4ade80;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* hidden until the script decides which screen to show (prevents flicker) */
+body:not(.ready) { visibility: hidden; }
+
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+}
+
+.card.wide { max-width: 560px; }
+
+.logo {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+h1 { font-size: 22px; margin: 0 0 6px; text-align: center; }
+h2 { font-size: 16px; margin: 0 0 10px; }
+.sub { color: var(--muted); font-size: 14px; text-align: center; margin: 0 0 22px; line-height: 1.5; }
+
+label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+
+.field { position: relative; }
+
+input[type="password"], input[type="text"], input[type="url"], select {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.field input { padding-right: 62px; }
+
+.toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+button.primary {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button.primary:hover:not(:disabled) { background: var(--primary-hover); }
+button.primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+button.secondary {
+  padding: 9px 14px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button.secondary:hover { border-color: var(--primary); }
+
+.link {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.msg { min-height: 20px; margin-top: 12px; font-size: 13px; text-align: center; }
+.msg.error { color: var(--danger); }
+.msg.ok { color: var(--ok); }
+
+.key-box {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 20px;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 16px 10px;
+  border: 2px dashed var(--primary);
+  border-radius: 12px;
+  background: var(--bg);
+  user-select: all;
+  word-break: break-all;
+}
+
+.row { display: flex; gap: 10px; margin-top: 12px; justify-content: center; flex-wrap: wrap; }
+
+.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 14px; margin-top: 18px; }
+.check input { margin-top: 3px; }
+
+.note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 16px;
+}
+
+.section { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 18px; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+[hidden] { display: none !important; }
